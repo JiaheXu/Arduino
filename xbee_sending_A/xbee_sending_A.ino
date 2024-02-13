@@ -1,0 +1,25 @@
+//Xbee TX setup:
+#include <SoftwareSerial.h>
+#define rxPin 2 //DOUT --> PIN 2
+#define txPin 3 //DIN --> PIN 3
+SoftwareSerial xbee = SoftwareSerial(rxPin, txPin);
+
+byte test_on[] = {0x7E, 0x00, 0x10, 0x17, 0x01, 0x00, 0x13, 0xA2, 0x00, 0x41, 0x90, 0x8A, 0x87, 0xFF, 0xFE, 0x02, 0x44, 0x31, 0x05, 0xD7}; //20
+byte test_off[] = {0x7E, 0x00, 0x0F, 0x17, 0x01, 0x00, 0x13, 0xA2, 0x00, 0x41, 0x90, 0x8A, 0x87, 0xFF, 0xFE, 0x02, 0x66, 0x72, 0x79}; //19
+void setup() {
+  Serial.begin(9600);
+  Serial.println("Remote E-Stop");
+  //xbee setup
+  pinMode(rxPin, INPUT);
+  pinMode(txPin, OUTPUT);
+  xbee.begin(9600);
+  //Switch setup
+  pinMode(8, INPUT_PULLUP);
+}
+void loop()
+{
+  xbee.write(test_on,20);
+  xbee.write("/n/r",2);
+  delay(500);
+  Serial.println("E-Stop Engaged");
+}
