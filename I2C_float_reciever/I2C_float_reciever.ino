@@ -34,7 +34,8 @@ void readI2C(){
     Wire.readBytes( (byte *) &myData, sizeof(myData));
   }
 }
-void writeI2C() {
+void writeI2C() 
+{
   arrayPointer = (byte*) &array;
   byte buffer[4*N_FLOATS];
   for(byte i = 0; i < 4*N_FLOATS; i++) 
@@ -45,7 +46,8 @@ void writeI2C() {
   Wire.endTransmission();
   
   Serial.print("master sent: ");
-  for (int i = 0; i < dataCount; i++)  {
+  for (int i = 0; i < dataCount; i++)  
+  {
     Serial.print(array[i],2);
     Serial.print(" ");
   }

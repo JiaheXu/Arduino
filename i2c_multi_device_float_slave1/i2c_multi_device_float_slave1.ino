@@ -1,6 +1,9 @@
 #include <Wire.h>
 #define SERIAL_BAUD 9600
 #define N_FLOATS 4
+
+int DEBUG = 0;
+
 volatile byte* arrayPointer;
 
 byte SLAVE_ADDRESS = 1;
@@ -42,14 +45,17 @@ void receiveEvent(int howMany)
   }
   memcpy(f, buffer, 4*N_FLOATS);
 
-  Serial.println ("slave recieved: ");
-  for(int i=0;i<4;i++)
+  if(DEBUG)
   {
-    Serial.print(f[i],2);
-    Serial.print(" ");
-  }
+    Serial.println ("slave recieved: ");
+    for(int i=0;i<4;i++)
+    {
+      Serial.print(f[i],2);
+      Serial.print(" ");
+    }
 
-  Serial.println();
+    Serial.println();
+  }
 }
 
 void writeI2C() 
@@ -59,12 +65,14 @@ void writeI2C()
   for(byte i = 0; i < 4*N_FLOATS; i++) 
     buffer[i] = arrayPointer[i];
   Wire.write(buffer,4*N_FLOATS);
-
-  Serial.print("slave sent: ");
-  for (int i = 0; i < dataCount; i++)  
+  if(DEBUG)
   {
-    Serial.print(array[i],2);
-    Serial.print(" ");
+    Serial.print("slave sent: ");
+    for (int i = 0; i < dataCount; i++)  
+    {
+      Serial.print(array[i],2);
+      Serial.print(" ");
+    }
+    Serial.println();
   }
-  Serial.println();
 }
