@@ -3,7 +3,7 @@
 const byte dataCount = 4;
 #define N_FLOATS 4
 
-int DEBUG = false;
+int DEBUG = 1;
 
 volatile byte* arrayPointer;
 union myData_UNION{
@@ -44,16 +44,16 @@ void loop()
   readI2C(2);
   output(2);  
 
-  readI2C(1);
-  output(1);
+  // readI2C(1);
+  // output(1);
 
-  readI2C(2);
-  output(2); 
-  readI2C(1);
-  output(1);
+  // readI2C(2);
+  // output(2); 
+  // readI2C(1);
+  // output(1);
 
-  readI2C(2);
-  output(2); 
+  // readI2C(2);
+  // output(2); 
 }
 void output(int address)
 {

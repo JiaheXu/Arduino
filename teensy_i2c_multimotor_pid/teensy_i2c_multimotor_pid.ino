@@ -7,9 +7,10 @@
 ////////////////////////////////////////////////////////////////////i2c
 int DEBUG = 0;
 volatile byte* arrayPointer;
-byte SLAVE_ADDRESS = 1;
+byte SLAVE_ADDRESS = 3;
+int times = 1;
 volatile byte lastMasterCommand = 99;
-// volatile float array[N_FLOATS] = {5.5, 6.6, 7.7, 8.8};
+// volatile float array[N_FLOATS] = {1.1*int(SLAVE_ADDRESS), 2.2*int(SLAVE_ADDRESS),3.3*int(SLAVE_ADDRESS),4.4*int(SLAVE_ADDRESS)};
 volatile float array[N_FLOATS] = {0.0, 0.0, 0.0, 0.0};
 volatile boolean sendStuff;
 
@@ -131,6 +132,11 @@ void requestEvent()
   writeI2C();
 }
 void receiveEvent(int howMany)
+{
+  readI2C();
+}
+
+void readI2C()
 {
   byte buffer[4*N_FLOATS];
   float f[4];
