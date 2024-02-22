@@ -2,8 +2,8 @@ from serial import Serial
 import time
 
 
-
-serPort = "/dev/ttyUSB0"
+serPort = "/dev/ttyACM0"
+# serPort = "/dev/ttyUSB0"
 ser = Serial(serPort, 9600)
    
 # Send character 'S' to start the program

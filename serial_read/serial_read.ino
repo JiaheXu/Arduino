@@ -1,17 +1,65 @@
-int incomingByte = 0; // for incoming serial data
+const byte numBytes = 90;
+byte receivedBytes[numBytes];
+byte numReceived = 0;
+
+boolean newData = false;
 
 void setup() {
-  Serial.begin(9600); // opens serial port, sets data rate to 9600 bps
+    Serial.begin(9600);
+    Serial.println("<Arduino is ready>");
 }
 
 void loop() {
-  // send data only when you receive data:
-  if (Serial.available() > 0) {
-    // read the incoming byte:
-    incomingByte = Serial.read();
+    recvBytesWithStartEndMarkers();
+    showNewData();
+}
 
-    // say what you got:
-    Serial.print("I received: ");
-    Serial.println(incomingByte, DEC);
-  }
+void recvBytesWithStartEndMarkers() {
+    // static boolean recvInProgress = false;
+    static boolean recvInProgress = true;
+    static byte ndx = 0;
+    byte startMarker = 0x3C;
+    byte endMarker = 0x3E;
+    byte rb;
+   
+
+    while (Serial.available() > 0 && newData == false) {
+        rb = Serial.read();
+
+        if (recvInProgress == true) {
+            if (rb != endMarker) {
+                receivedBytes[ndx] = rb;
+                ndx++;
+                if (ndx >= numBytes) {
+                    ndx = numBytes - 1;
+                }
+            }
+            else {
+                receivedBytes[ndx] = '\0'; // terminate the string
+                recvInProgress = false;
+                numReceived = ndx;  // save the number for use when printing
+                ndx = 0;
+                newData = true;
+            }
+        }
+
+        else if (rb == startMarker) 
+        {
+            recvInProgress = true;
+        }
+    }
+}
+
+void showNewData() {
+    // if (newData == true) {
+        // Serial.print("This just in (HEX values)... ");
+        // for (byte n = 0; n < numReceived; n++) {
+        //     Serial.print(receivedBytes[n], HEX);
+        //     Serial.print(' ');
+        // }
+        Serial.print("numReceived: ");
+        Serial.print(numReceived);
+        Serial.println();
+        // newData = false;
+    // }
 }
