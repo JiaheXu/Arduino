@@ -17,26 +17,12 @@ class serial_interface():
         # self.waitForArduino()
 
     def recvLikeArduino( self ):
-        bs = self.serialPort.readline()
-        print(bs)
-        # if self.serialPort.inWaiting() > 0 and self.messageComplete == False:
-        #     x = self.serialPort.read().decode("utf-8") # decode needed for Python3
-            
-        #     if self.dataStarted == True:
-        #         if x != self.endMarker:
-        #             self.dataBuf = self.dataBuf + x
-        #         else:
-        #             self.dataStarted = False
-        #             self.messageComplete = True
-        #     elif x == self.startMarker:
-        #         self.dataBuf = ''
-        #         self.dataStarted = True
-        
-        # if (self.messageComplete == True):
-        #     self.messageComplete = False
-        #     return self.dataBuf
-        # else:
-        #     return "XXX" 
+
+        if self.serialPort.in_waiting > 0:
+            # Read the byte array
+            # byte_array = self.serialPort.read(88)
+            byte_array = self.serialPort.read(self.serialPort.in_waiting)
+            print("Received:", len(byte_array))
 
     def waitForArduino( self ):
 
@@ -54,25 +40,38 @@ class serial_interface():
         dataWithMarkers = bytearray(self.startMarker, "utf-8")
         dataWithMarkers += bytearray(dataToSend)
         dataWithMarkers += bytearray(self.endMarker, "utf-8")
-        print("length: ", len(dataWithMarkers))
+        # print("length: ", len(dataWithMarkers))
         self.serialPort.write(dataWithMarkers) # encode needed for Python3
-        print("sent !!!")
+        # print("sent !!!")
 
 serial_node = serial_interface(9600, "/dev/ttyACM0")
 count = 0
 prevTime = time.time()
 int32_array = array.array('i', [ num for num in range(22)])
 float_array = array.array('f', [ float(num) for num in range(22)])
+
+start = time.time()
+end = time.time()
+
+
 while True:
 
-    reply_msg = serial_node.recvLikeArduino()
-    
-    if not (reply_msg == 'XXX'):
-        print ("Time %s  Reply %s" %(time.time(), arduinoReply))    
-        # send a message at intervals
+    arduinoReply = serial_node.recvLikeArduino()
+    end = time.time()
+    print( (end - start)* 1000, "ms" )
+    # if not (arduinoReply == 'XXX'):
+    #     print ("Time %s  Reply %s" %(time.time(), arduinoReply))    
+    #     # send a message at intervals
 
-    if time.time() - prevTime > 0.10:
-        # serial_node.sendToArduino(int32_array)
-        serial_node.sendToArduino(float_array)
-        prevTime = time.time()
-        count += 1
+    serial_node.sendToArduino(float_array)
+    start = time.time()
+    prevTime = start
+
+
+# while True:
+#     start = time.time()
+#     ser.write(bytearray(struct.pack("f", value)))
+#     bs = ser.readline()
+#     end = time.time()
+#     print( (end - start)* 1000, "ms" )
+#     print(bs)
