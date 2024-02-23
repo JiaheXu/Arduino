@@ -1,77 +1,100 @@
-const byte numChars = 64;
-char receivedChars[numChars];
+#include <Wire.h>
 
-boolean newData = false;
+int DEBUG = 0;
 
-byte ledPin = 13;   // the onboard LED
+const byte dataCount = 4;
+#define N_FLOATS 4
 
-//===============
+volatile byte* arrayPointer;
+union myData_UNION{
+ float floatData[dataCount];
+ byte rawData[dataCount*sizeof(float)];
+};
+
+myData_UNION myData[10];
+myData_UNION * pMyData[10];
+
+volatile float array[N_FLOATS] = {11, 22, 33, 44};
+volatile boolean sendStuff;
 
 void setup() {
-    Serial.begin(115200);
-
-    pinMode(ledPin, OUTPUT);
-    digitalWrite(ledPin, HIGH);
-    delay(200);
-    digitalWrite(ledPin, LOW);
-    delay(200);
-    digitalWrite(ledPin, HIGH);
-
-    Serial.println("<Arduino is ready>");
+   Wire.begin();
+   Serial.begin(9600);
 }
 
-//===============
-
-void loop() {
-    recvWithStartEndMarkers();
-    replyToPython();
-}
-
-//===============
-
-void recvWithStartEndMarkers() {
-    static boolean recvInProgress = false;
-    static byte ndx = 0;
-    char startMarker = '<';
-    char endMarker = '>';
-    char rc;
-
-    while (Serial.available() > 0 && newData == false) {
-        rc = Serial.read();
-
-        if (recvInProgress == true) {
-            if (rc != endMarker) {
-                receivedChars[ndx] = rc;
-                ndx++;
-                if (ndx >= numChars) {
-                    ndx = numChars - 1;
-                }
-            }
-            else {
-                receivedChars[ndx] = '\0'; // terminate the string
-                recvInProgress = false;
-                ndx = 0;
-                newData = true;
-            }
-        }
-
-        else if (rc == startMarker) {
-            recvInProgress = true;
-        }
+// byte x = 0;
+unsigned long previousMillis = 0;
+void output(int address)
+{
+  if(DEBUG)
+  {
+    Serial.print("master get: ");
+    for (int i = 0; i < dataCount; i++)  {
+      Serial.print(myData[address].floatData[i],2);
+      Serial.print(" ");
     }
+    Serial.println();
+  }
 }
+void loop() 
+{
+  unsigned long currentMillis = millis();
+  if(previousMillis == 0)
+  {
+    previousMillis = currentMillis;
+  }
 
-//===============
+  if(DEBUG)
+  {
+    Serial.print("time diff: ");
+    Serial.println( currentMillis - previousMillis);
+    Serial.print("currentMillis: ");
+    Serial.println( currentMillis);
+  }
 
-void replyToPython() {
-    if (newData == true) {
-        Serial.print("<This just in ... ");
-        Serial.print(receivedChars);
-        Serial.print("   ");
-        Serial.print(millis());
-        Serial.print('>');
-            // change the state of the LED everytime a reply is sent
-        digitalWrite(ledPin, ! digitalRead(ledPin));
-        newData = false;
+  previousMillis = currentMillis;
+  
+  writeI2C(1);
+  readI2C(1);
+  output(1);
+
+  writeI2C(2);
+  readI2C(2);
+  output(2);
+
+  writeI2C(3);
+  readI2C(3);
+  output(3);
+
+  writeI2C(4);
+  readI2C(4);
+  output(4);
+}
+void readI2C(int address)
+{ 
+  if (Wire.requestFrom (address, sizeof myData[0]) == sizeof myData[0])
+  {
+    Wire.readBytes( (byte *) &myData[address], sizeof(myData[0]));
+  }
+}
+void writeI2C(int address) 
+{
+  arrayPointer = (byte*) &array;
+  byte buffer[4*N_FLOATS];
+  for(byte i = 0; i < 4*N_FLOATS; i++) 
+    buffer[i] = arrayPointer[i];
+  
+  Wire.beginTransmission(address); // transmit to device #4
+  Wire.write(buffer,4*N_FLOATS);
+  Wire.endTransmission();
+  if(DEBUG)
+  {
+    Serial.print("master sent: ");
+    for (int i = 0; i < dataCount; i++)  
+    {
+      Serial.print(array[i],2);
+      Serial.print(" ");
     }
+    Serial.println();
+  }
 }
