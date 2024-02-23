@@ -5,14 +5,9 @@ byte numReceived = 0;
 boolean newData = false;
 #define N_FLOATS 22
 
-const byte dataCount = 22;
+byte dataCount = 22;
 byte byteCount = 22*4;
-union myData_UNION{
- float floatData[dataCount];
- byte rawData[dataCount*sizeof(float)];
-};
-myData_UNION myData;
-myData_UNION * pMyData;
+
 
 float f[22];
 void setup() {
@@ -28,7 +23,6 @@ void loop() {
 void recvBytesWithStartEndMarkers() 
 {
     static boolean recvInProgress = false;
-    // static boolean recvInProgress = true;
     static byte ndx = 0;
     byte startMarker = 0x3C;
     byte endMarker = 0x3E;
@@ -65,7 +59,11 @@ void recvBytesWithStartEndMarkers()
 }
 
 void showNewData() {
+  if (newData == true) {
+    Serial.print("git float array");
+    newData = false;
+  }
   // Serial.write(receivedBytes, dataCount*4);
-  for(int i=0;i<22;i++)
-    Serial.print(f[i]);
+  // for(int i=0;i<22;i++)
+  //   Serial.print(f[i]);
 }

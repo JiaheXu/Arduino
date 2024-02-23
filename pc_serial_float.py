@@ -17,12 +17,29 @@ class serial_interface():
         # self.waitForArduino()
 
     def recvLikeArduino( self ):
+        bs = self.serialPort.readline()
+        byte_array = bytearray(bs)
+        print("recieve:", byte_array )
+        # print("recieve:", len(byte_array) )
 
-        if self.serialPort.in_waiting > 0:
-            # Read the byte array
-            # byte_array = self.serialPort.read(88)
-            byte_array = self.serialPort.read(self.serialPort.in_waiting)
-            print("Received:", len(byte_array))
+        # if self.serialPort.inWaiting() > 0 and self.messageComplete == False:
+        #     x = self.serialPort.read().decode("utf-8") # decode needed for Python3
+            
+        #     if self.dataStarted == True:
+        #         if x != self.endMarker:
+        #             self.dataBuf = self.dataBuf + x
+        #         else:
+        #             self.dataStarted = False
+        #             self.messageComplete = True
+        #     elif x == self.startMarker:
+        #         self.dataBuf = ''
+        #         self.dataStarted = True
+        
+        # if (self.messageComplete == True):
+        #     self.messageComplete = False
+        #     return self.dataBuf
+        # else:
+        #     return "XXX" 
 
     def waitForArduino( self ):
 
@@ -55,18 +72,17 @@ end = time.time()
 
 
 while True:
-
+    start = time.time()
+    serial_node.sendToArduino(float_array)
     arduinoReply = serial_node.recvLikeArduino()
     end = time.time()
     print( (end - start)* 1000, "ms" )
-    # if not (arduinoReply == 'XXX'):
-    #     print ("Time %s  Reply %s" %(time.time(), arduinoReply))    
-    #     # send a message at intervals
 
-    serial_node.sendToArduino(float_array)
-    start = time.time()
-    prevTime = start
-
+    # if time.time() - prevTime > 0.10:
+    #     serial_node.sendToArduino(float_array)
+    #     start = time.time()
+    #     prevTime = time.time()
+    #     count += 1
 
 # while True:
 #     start = time.time()
