@@ -17,29 +17,15 @@ class serial_interface():
         # self.waitForArduino()
 
     def recvLikeArduino( self ):
-        bs = self.serialPort.readline()
-        byte_array = bytearray(bs)
-        print("recieve:", byte_array )
-        # print("recieve:", len(byte_array) )
+        while( self.serialPort.inWaiting() == 0):
+            continue
 
-        # if self.serialPort.inWaiting() > 0 and self.messageComplete == False:
-        #     x = self.serialPort.read().decode("utf-8") # decode needed for Python3
-            
-        #     if self.dataStarted == True:
-        #         if x != self.endMarker:
-        #             self.dataBuf = self.dataBuf + x
-        #         else:
-        #             self.dataStarted = False
-        #             self.messageComplete = True
-        #     elif x == self.startMarker:
-        #         self.dataBuf = ''
-        #         self.dataStarted = True
-        
-        # if (self.messageComplete == True):
-        #     self.messageComplete = False
-        #     return self.dataBuf
-        # else:
-        #     return "XXX" 
+        byte_array = self.serialPort.read(self.serialPort.inWaiting())
+        byte_array = bytearray(byte_array)
+        arr = array.array('f')
+        arr.frombytes(byte_array)
+        print(arr)
+        print(len(byte_array))
 
     def waitForArduino( self ):
 
@@ -57,7 +43,6 @@ class serial_interface():
         dataWithMarkers = bytearray(self.startMarker, "utf-8")
         dataWithMarkers += bytearray(dataToSend)
         dataWithMarkers += bytearray(self.endMarker, "utf-8")
-        # print("length: ", len(dataWithMarkers))
         self.serialPort.write(dataWithMarkers) # encode needed for Python3
         # print("sent !!!")
 

@@ -60,7 +60,8 @@ void recvBytesWithStartEndMarkers()
 
 void showNewData() {
   if (newData == true) {
-    Serial.print("git float array");
+    // Serial.print("git float array");
+    Serial.write(receivedBytes, dataCount*4);
     newData = false;
   }
   // Serial.write(receivedBytes, dataCount*4);
