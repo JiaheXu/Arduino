@@ -7,7 +7,7 @@
 ////////////////////////////////////////////////////////////////////i2c
 int DEBUG = 0;
 volatile byte* arrayPointer;
-byte SLAVE_ADDRESS = 3;
+byte SLAVE_ADDRESS = 1;
 int times = 1;
 volatile byte lastMasterCommand = 99;
 // volatile float array[N_FLOATS] = {1.1*int(SLAVE_ADDRESS), 2.2*int(SLAVE_ADDRESS),3.3*int(SLAVE_ADDRESS),4.4*int(SLAVE_ADDRESS)};

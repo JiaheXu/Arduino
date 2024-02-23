@@ -50,7 +50,7 @@ serial_node = serial_interface(9600, "/dev/ttyACM0")
 count = 0
 prevTime = time.time()
 int32_array = array.array('i', [ num for num in range(22)])
-float_array = array.array('f', [ float(num) for num in range(22)])
+float_array = array.array('f', [ float(num+2) for num in range(22)])
 
 start = time.time()
 end = time.time()
