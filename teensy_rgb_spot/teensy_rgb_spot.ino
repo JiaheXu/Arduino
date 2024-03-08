@@ -3,6 +3,7 @@
   #include <avr/power.h>
 #endif
 #define RGB_PIN        10
+#define ORIN_PIN       8
 #define ESTOP_PIN      6
 #define NUMPIXELS 7
 
@@ -14,6 +15,7 @@ void setup() {
   clock_prescale_set(clock_div_1);
 #endif
   pinMode(RGB_PIN, OUTPUT);
+  pinMode(ORIN_PIN, OUTPUT);
   pinMode(ESTOP_PIN, INPUT);
   pixels.begin();
 }
@@ -23,6 +25,9 @@ void loop()
 {
 
   val = digitalRead(ESTOP_PIN);
+  
+  digitalWrite(ORIN_PIN, val); // pass to Orin
+
   pixels.clear();
   if(last_val != val)
   {
@@ -31,13 +36,13 @@ void loop()
     {
       for(int i=0; i<NUMPIXELS; i++) 
       {
-        pixels.setPixelColor(i, pixels.Color(150, 150, 0));
+        pixels.setPixelColor(i, pixels.Color(150, 150, 0)); // yellow light
         pixels.show();
       }
-      delay(3000);
+      delay(5000);
       for(int i=0; i<NUMPIXELS; i++) 
       {
-        pixels.setPixelColor(i, pixels.Color(150, 0, 0));
+        pixels.setPixelColor(i, pixels.Color(150, 0, 0)); // red light
         pixels.show();
       }
         
