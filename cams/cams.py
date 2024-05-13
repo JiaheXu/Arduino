@@ -84,31 +84,31 @@ calib_E_1_4 = np.array([
     [ 0.,          0.,          0.,          1.       ]
     ])
 
-# # E_from_to
-# E_2_1 = Fi(cam1) @ cam2
-# # print("E_1_0:\n", E_2_1)
-# E_1_2 = Fi(E_2_1)
-# print("E_1_2 - calib_E_1_2:\n", E_1_2 - calib_E_1_2)
+# E_from_to
+E_2_1 = Fi(cam1) @ cam2
+# print("E_1_0:\n", E_2_1)
+E_1_2 = Fi(E_2_1)
+print("E_1_2 - calib_E_1_2:\n", E_1_2 - calib_E_1_2)
 
-# E_3_2 = Fi(cam2) @ cam3
-# # print("E_1_0:\n", E_2_1)
-# E_2_3 = Fi(E_3_2)
-# print("E_2_3 - calib_E_2_3:\n", E_2_3 - calib_E_2_3)
+E_3_2 = Fi(cam2) @ cam3
+# print("E_1_0:\n", E_2_1)
+E_2_3 = Fi(E_3_2)
+print("E_2_3 - calib_E_2_3:\n", E_2_3 - calib_E_2_3)
 
 
-# E_4_3 = Fi(cam3) @ cam4
-# # print("E_1_0:\n", E_2_1)
-# E_3_4 = Fi(E_4_3)
-# print("E_3_4 - calib_E_3_4:\n", E_3_4 - calib_E_3_4)
+E_4_3 = Fi(cam3) @ cam4
+# print("E_1_0:\n", E_2_1)
+E_3_4 = Fi(E_4_3)
+print("E_3_4 - calib_E_3_4:\n", E_3_4 - calib_E_3_4)
 
-# E_4_1 = Fi(cam1) @ cam4
-# # print("E_1_0:\n", E_2_1)
-# E_1_4 = Fi(E_4_1)
-# print("E_1_4 - calib_E_1_4:\n", E_1_4 - calib_E_1_4)
+E_4_1 = Fi(cam1) @ cam4
+# print("E_1_0:\n", E_2_1)
+E_1_4 = Fi(E_4_1)
+print("E_1_4 - calib_E_1_4:\n", E_1_4 - calib_E_1_4)
 
-# print("\ncalib self test:")
-# test_E_1_4 = calib_E_3_4 @ calib_E_2_3 @ calib_E_1_2
-# print("test_E_1_4 - calib_E_1_4:\n", test_E_1_4 - calib_E_1_4)
+print("\ncalib self test:")
+test_E_1_4 = calib_E_3_4 @ calib_E_2_3 @ calib_E_1_2
+print("test_E_1_4 - calib_E_1_4:\n", test_E_1_4 - calib_E_1_4)
 
 calib_cam1 = cam1
 calib_cam2 = cam1 @ Fi( calib_E_1_2)
@@ -120,10 +120,10 @@ calib_cam3 = cam1 @ Fi( calib_E_1_2) @ Fi( calib_E_2_3)
 calib_cam4 = cam1 @ Fi( calib_E_1_2) @ Fi( calib_E_2_3) @ Fi( calib_E_3_4)
 # print("calib_cam4 - cam4:\n", calib_cam4 - cam4)
 
-print("calib_cam1:\n", calib_cam1)
-print("calib_cam2:\n", calib_cam2)
-print("calib_cam3:\n", calib_cam3)
-print("calib_cam4:\n", calib_cam4)
+# print("calib_cam1:\n", calib_cam1)
+# print("calib_cam2:\n", calib_cam2)
+# print("calib_cam3:\n", calib_cam3)
+# print("calib_cam4:\n", calib_cam4)
 # NSH
 # cam1 cam2
 # run1

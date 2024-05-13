@@ -1,9 +1,9 @@
 #include <util/atomic.h> // For the ATOMIC_BLOCK macro
 
-#define ENCA 2 // YELLOW
-#define ENCB 3 // WHITE
-#define PWM 5
-#define IN1 6
+#define ENCA 1 // YELLOW
+#define ENCB 0 // WHITE
+#define PWM 3
+#define IN1 2
 #define IN2 7
 
 volatile int posi = 0; // specify posi as volatile: https://www.arduino.cc/reference/en/language/variables/variable-scope-qualifiers/volatile/
@@ -19,7 +19,7 @@ void setup() {
   
   pinMode(PWM,OUTPUT);
   pinMode(IN1,OUTPUT);
-  pinMode(IN2,OUTPUT);
+  // pinMode(IN2,OUTPUT);
   
   Serial.println("target pos");
 }
@@ -27,8 +27,8 @@ void setup() {
 void loop() {
 
   // set target position
-  //int target = 1200;
-  int target = -2500;
+  int target = 2500;
+  // int target = -2500;
 
   // PID constants
   float kp = 1;
@@ -66,8 +66,8 @@ void loop() {
     pwr = 255;
   }
 
-  if( pwr < 50 ){
-    pwr = 50;
+  if( pwr < 20 ){
+    pwr = 20;
   }
 
   if(e==0)
@@ -76,14 +76,14 @@ void loop() {
   }
 
   // motor direction
-  int dir = 1;
+  int dir = 0;
   if(u<0)
   {
-    dir = 0;
+    dir = 1;
   }
 
   // signal the motor
-  setMotor(dir,pwr,PWM,IN1,IN2);
+  setMotor(dir,pwr,PWM,IN1);
 
 
   // store previous error
@@ -95,7 +95,7 @@ void loop() {
   Serial.println();
 }
 
-void setMotor(int dir, int pwmVal, int pwm, int in1, int in2){
+void setMotor(int dir, int pwmVal, int pwm, int in1){
   analogWrite(pwm,pwmVal);
   if(dir == 1){
     digitalWrite(in1,HIGH);

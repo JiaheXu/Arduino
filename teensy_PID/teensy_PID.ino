@@ -28,7 +28,7 @@ void loop() {
 
   // set target position
   //int target = 1200;
-  int target = -1200;
+  int target = 1200;
 
   // PID constants
   float kp = 1;
@@ -76,10 +76,10 @@ void loop() {
   }
 
   // motor direction
-  int dir = 0;
+  int dir = 1;
   if(u<0)
   {
-    dir = 1;
+    dir = 0;
   }
 
   // signal the motor
@@ -91,6 +91,7 @@ void loop() {
 
   Serial.print(target);
   Serial.print(" ");
+  Serial.print("pos: ");
   Serial.print(pos);
   Serial.println();
 }

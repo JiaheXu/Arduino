@@ -2,10 +2,10 @@
 #ifdef __AVR__
   #include <avr/power.h>
 #endif
-#define RGB_PIN        10
+#define RGB_PIN       4
 #define RELAY_PIN       8
 #define ESTOP_PIN      6
-#define NUMPIXELS 7
+#define NUMPIXELS      7
 
 Adafruit_NeoPixel pixels(NUMPIXELS, RGB_PIN, NEO_GRB + NEO_KHZ800);
 #define DELAYVAL 500
@@ -54,12 +54,12 @@ void loop()
         pixels.setPixelColor(i, pixels.Color(0, 150, 0));
         pixels.show();
       }
-      digitalWrite(RELAY_PIN, LOW);
+      // digitalWrite(RELAY_PIN, LOW);
     }
   }
   digitalWrite(RELAY_PIN, val); // pass to relay
   last_val = val;
 
-  // if(val == HIGH)
-  // delay(100);
+  if(val == HIGH)
+  delay(100);
 }
