@@ -1,4 +1,5 @@
 #include <util/atomic.h> // For the ATOMIC_BLOCK macro
+#include <EEPROM.h>
 
 #define ENCA 1 // green
 #define ENCB 0 // yellow
@@ -11,8 +12,13 @@ long prevT = 0;
 float eprev = 0;
 float eintegral = 0;
 
+int POS_ADDRESS = 0;
+
 void setup() {
   Serial.begin(9600);
+  // writeIntIntoEEPROM( POS_ADDRESS, 0);
+  posi = readIntFromEEPROM(POS_ADDRESS);
+
   pinMode(ENCA,INPUT);
   pinMode(ENCB,INPUT);
   attachInterrupt(digitalPinToInterrupt(ENCA),readEncoder,RISING);
@@ -28,8 +34,8 @@ void loop() {
 
   // set target position
   // int target = -2940;
-  int target = -36;
-  // int target = -100;
+  // int target = -36;
+  int target = 0;
 
   // PID constants
   float kp = 1;
@@ -48,7 +54,9 @@ void loop() {
   ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
     pos = posi;
   }
-  
+  Serial.print("MEM: ");
+  Serial.println( readIntFromEEPROM(0) );
+  // Serial.println(sizeof(int));
   // error
   int e = pos - target;
 
@@ -116,4 +124,22 @@ void readEncoder(){
   else{
     posi--;
   }
+  writeIntIntoEEPROM( POS_ADDRESS, posi);
+  // writeIntIntoEEPROM( POS_ADDRESS, 0);
+}
+
+
+void writeIntIntoEEPROM(int address, int number)
+{ 
+  EEPROM.write(address, (number >> 24) & 0xFF);
+  EEPROM.write(address + 1, (number >> 16) & 0xFF);
+  EEPROM.write(address + 2, (number >> 8) & 0xFF);
+  EEPROM.write(address + 3, number & 0xFF);
+}
+long readIntFromEEPROM(int address)
+{
+  return ((long)EEPROM.read(address) << 24) +
+         ((long)EEPROM.read(address + 1) << 16) +
+         ((long)EEPROM.read(address + 2) << 8) +
+         (long)EEPROM.read(address + 3);
 }
