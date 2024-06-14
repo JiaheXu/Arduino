@@ -1,9 +1,9 @@
 #include <util/atomic.h> // For the ATOMIC_BLOCK macro
 
-#define ENCA 1 // YELLOW
-#define ENCB 0 // WHITE
-#define PWM 3
-#define IN1 2
+#define ENCA 1 // green
+#define ENCB 0 // yellow
+#define PWM 3 //EN
+#define IN1 2 //ph
 #define IN2 7
 
 volatile int posi = 0; // specify posi as volatile: https://www.arduino.cc/reference/en/language/variables/variable-scope-qualifiers/volatile/
@@ -27,8 +27,9 @@ void setup() {
 void loop() {
 
   // set target position
-  // int target = 100;
-  int target = -2500;
+  // int target = -2940;
+  int target = -36;
+  // int target = -100;
 
   // PID constants
   float kp = 1;
@@ -63,13 +64,14 @@ void loop() {
   // motor power
   float pwr = fabs(u);
   if( pwr > 255 ){
-    pwr = 255;
+    // pwr = 255;
+    pwr = 20;
   }
 
   if( pwr < 20 ){
     pwr = 20;
   }
-
+  pwr = 30;
   if(e==0)
   {
     pwr = 0;
