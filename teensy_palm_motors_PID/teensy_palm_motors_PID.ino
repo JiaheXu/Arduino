@@ -27,7 +27,7 @@ void setup() {
   pinMode(IN1,OUTPUT);
   // pinMode(IN2,OUTPUT);
   
-  Serial.println("target pos");
+  // Serial.println("target pos");
 }
 
 void loop() {
@@ -35,7 +35,7 @@ void loop() {
   // set target position
   // int target = -2940;
   // int target = -36;
-  int target = -50;
+  int target = 0;
 
   // PID constants
   float kp = 1;
@@ -71,15 +71,15 @@ void loop() {
 
   // motor power
   float pwr = fabs(u);
-  if( pwr > 255 ){
-    // pwr = 255;
-    pwr = 255;
+  if( pwr > 100 ){
+    pwr = 100;
+    // pwr = 20;
   }
 
-  if( pwr < 200 ){
-    pwr = 200;
+  if( pwr < 50 ){
+    pwr = 50;
   }
-  pwr = 255;
+  // pwr = 40;
   if(e==0)
   {
     pwr = 0;
@@ -87,7 +87,7 @@ void loop() {
 
   // motor direction
   int dir = 0;
-  if(u<0)
+  if(u>0)
   {
     dir = 1;
   }

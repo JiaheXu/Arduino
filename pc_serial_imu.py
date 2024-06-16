@@ -17,24 +17,15 @@ class serial_interface():
         # self.waitForArduino()
 
     def recvLikeArduino( self ):
-
         while( self.serialPort.inWaiting() == 0):
             continue
 
         byte_array = self.serialPort.read(self.serialPort.inWaiting())
         byte_array = bytearray(byte_array)
-        print(byte_array)
+        arr = array.array('f')
+        arr.frombytes(byte_array)
+        print(arr)
         print(len(byte_array))
-        # print(byte_array[0])
-        # print(byte_array[-1])
-        if(byte_array[0] !=60 or byte_array[-1] != 62):
-            return
-        byte_string = byte_array.decode("utf-8")
-        quat = []
-        # todo send and recieve as float
-        for i in range(4):
-            quat.append(float( byte_string[4*i+1: 4*i+5]))
-        print(quat)
 
     def waitForArduino( self ):
 
@@ -67,9 +58,21 @@ end = time.time()
 
 while True:
     start = time.time()
-    # serial_node.sendToArduino(float_array)
+    serial_node.sendToArduino(float_array)
     arduinoReply = serial_node.recvLikeArduino()
     end = time.time()
     print( (end - start)* 1000, "ms" )
 
+    # if time.time() - prevTime > 0.10:
+    #     serial_node.sendToArduino(float_array)
+    #     start = time.time()
+    #     prevTime = time.time()
+    #     count += 1
 
+# while True:
+#     start = time.time()
+#     ser.write(bytearray(struct.pack("f", value)))
+#     bs = ser.readline()
+#     end = time.time()
+#     print( (end - start)* 1000, "ms" )
+#     print(bs)
