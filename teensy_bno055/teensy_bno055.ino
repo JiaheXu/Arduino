@@ -23,6 +23,9 @@ void setup(void)
   bno.setExtCrystalUse(true);
 }
 
+float state_float_buffer[ 4 ];
+byte state_byte_buffer[ 4*4 ];
+
 void loop(void) 
 {
   /* Get a new sensor event */ 
@@ -40,16 +43,24 @@ void loop(void)
 
 imu::Quaternion quat = bno.getQuat();
 
-/* Display the quat data */
-Serial.print("qW: ");
-Serial.print(quat.w(), 4);
-Serial.print(" qX: ");
-Serial.print(quat.x(), 4);
-Serial.print(" qY: ");
-Serial.print(quat.y(), 4);
-Serial.print(" qZ: ");
-Serial.print(quat.z(), 4);
-Serial.println("");
+  /* Display the quat data */
+  // Serial.print("qW: ");
+  // Serial.print("<");
+  // Serial.print(quat.w(), 4);
+  // Serial.print(quat.x(), 4);
+  // Serial.print(quat.y(), 4);
+  // Serial.print(quat.z(), 4);
+  // // Serial.print(">");
+  // Serial.println(">");
 
+  state_float_buffer[0] = quat.x();
+  state_float_buffer[1] = quat.y();
+  state_float_buffer[2] = quat.z();
+  state_float_buffer[3] = quat.w();    
+  Serial.print("<");
+  memcpy( state_byte_buffer, state_float_buffer, 4*4);
+  Serial.write(state_byte_buffer, 4*4);  
+  Serial.print(">");
+    
   delay(100);
 }
