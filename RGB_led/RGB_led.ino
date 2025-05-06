@@ -21,8 +21,8 @@ void loop() {
 
   for(int i=0; i<NUMPIXELS; i++) {
 
-    pixels.setPixelColor(i, pixels.Color(150, 0, 0));
+    pixels.setPixelColor(i, pixels.Color(0, 150, 0));
     pixels.show();
-    delay(DELAYVAL);
+    // delay(DELAYVAL);
   }
 }
